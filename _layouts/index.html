@@ -1,0 +1,91 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<link rel="stylesheet" href="/assets/css/style.css?v=3673460683dd848915a2a1f3b26a8b3c51f1c996">
+<style type="text/css">
+.container {width:100%;max-width:100%;margin: 0;}
+.container::after{content:"";clear:both;display:block;}
+.container #main_content{float:left;width:70%;}
+.container #side_cat{float:left;width:30%;}
+.container section {margin:0;}
+</style>
+<title>{{ page.title }}</title>
+</head>
+<body>
+{% include header.html %}
+<div class="container">
+<section id="main_content">
+<div id="data-island" style="display:none;">
+[{% for post in site.posts %}
+{% if forloop.index0 > 0 %},{% endif %}{"title":"{{post.title}}","url":"{{post.url}}","category":"{{ post.category }}","time":{{ post.date | date: '%s' }}}
+{% endfor %}]
+</div>
+{{ content }}
+</section>
+<section id="side_cat">
+<h4><a href="javascript:void(0)" onclick="renderCategoryBolgs(0)">所有文章</a></h4>
+<ul id="bolg-category">
+</ul>
+
+</section>
+<script type="text/javascript">
+/* global vars */
+var bolgmain = document.getElementById("bolg-main");
+var bolgcat = document.getElementById("bolg-category");
+var bolgs = JSON.parse(document.getElementById('data-island').innerHTML);
+var categories = [];
+
+/* render functions */
+function renderBolgs(bolgs) {
+    bolgmain.innerHTML = '';
+    for (var i in bolgs) {
+        bolgmain.innerHTML += bolgToHtml(bolgs[i]);
+    }
+}
+function timeformat(time){
+    var dt = new Date();
+    dt.setTime(time*1000);
+    return dt.toDateString();
+}
+function bolgToHtml(bolg) {
+    return '<li>['+(bolg.category?bolg.category:'未分类')+'] '+timeformat(bolg.time)+' <a href="'+bolg.url+'">'+bolg.title+'</a></li>';
+}
+
+function renderCategories(categories){
+    for (var cat in categories) {
+        bolgcat.innerHTML += categoryToHtml(cat, categories[cat]);
+    }
+}
+function categoryToHtml(cat, category){
+    return '<li><a href="javascript:void(0);" title="'+cat+'" onclick="renderCategoryBolgs(\''+cat+'\')">'+cat+' ('+category.length+')</a></li>'
+}
+function renderCategoryBolgs(cat) {
+    if (cat) {
+        renderBolgs(categories[cat]);
+    } else {
+        renderBolgs(bolgs);
+    }
+}
+
+/* init bolg list */
+renderBolgs(bolgs);
+
+/* init bolg categories */
+function buildCategories(bolgs){
+    for (var i in bolgs) {
+        var cat = bolgs[i].category ? bolgs[i].category : '未分类';
+        if (categories[cat] === undefined) {
+            categories[cat] = [];
+        }
+        categories[cat].push(bolgs[i]);
+    }
+
+    console.log(categories);
+}
+buildCategories(bolgs);
+renderCategories(categories);
+</script>
+</div>
+</body>
+</html>

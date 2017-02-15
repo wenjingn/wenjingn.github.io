@@ -1,0 +1,27 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<link rel="stylesheet" href="/assets/css/style.css?v=3673460683dd848915a2a1f3b26a8b3c51f1c996">
+<style type="text/css">
+.container {width:70%;max-width:70%;margin: 0 auto;}
+.container::after{content:"";clear:both;display:block;}
+pre, code {
+    white-space: pre;
+    display: inline-block;
+    margin: 0;
+    font: 14px/1.8em Menlo, Consolas, "Courier New", Courier, "Liberation Mono", monospace;
+    padding: 0 0.5em;
+}
+</style>
+<title>{{ page.title }}</title>
+</head>
+<body>
+{% include header.html %}
+<div class="container">
+<section id="main_content">
+{{ content }}
+</section>
+</div>
+</body>
+</html>
